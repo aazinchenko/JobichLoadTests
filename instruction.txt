@@ -1,0 +1,30 @@
+3 steps
+3 steps
+Готово — файл сгенерирован и скачан: jobich-jmeter-scenario.jmx (~36.8 КБ). Он должен появиться в папке загрузок браузера.
+
+Что внутри:
+
+Test Plan с User Defined Variables: PROTOCOL=https, HOST=jobich.ch, SEARCH_TERM=Software Engineer, LOCATION=Zurich, INDUSTRY=IT & Software, WORK_MODE=Hybrid, EMPLOYMENT_TYPE=Full-time — все значения легко поменять прямо в GUI JMeter (Test Plan → User Defined Variables).
+
+Thread Group "New User - Job Search Scenario": 10 потоков, ramp-up 10 сек, 5 итераций (можно менять под нагрузочный или функциональный прогон).
+
+Внутри группы: HTTP Request Defaults (домен/протокол из переменных), HTTP Header Manager (Accept, Accept-Language, User-Agent), HTTP Cookie Manager, отключенный по умолчанию CSV Data Set Config (для параметризации SEARCH_TERM/LOCATION, если захотите прогонять разные запросы по потокам), и Gaussian Random Timer (think time ~0.8с ±0.5с).
+
+Последовательность запросов повторяет реальный путь пользователя, который я записал через network capture:
+
+GET / — главная страница
+GET /api/scrape?action=stats
+GET /api/jobs?action=preview&industry=...&work_mode=...&employment_type=... — превью по фильтрам из wizard'а
+GET / — переход на страницу поиска
+GET /api/jobs?q=...&limit=30&sort=date&sort_dir=desc — сам поиск, с JSON Extractor'ом, который пытается вытащить jobUrl по пути $.jobs[0].url
+GET /api/jobs?q=...&limit=30&location=...&sort=date&sort_dir=desc — тот же поиск с фильтром по локации
+GET /api/salary?title=...
+GET /api/describe?url=${jobUrl} — детали вакансии
+GET /api/jobs?action=similar&url=${jobUrl} — похожие вакансии
+На каждом API-запросе — Response Assertion (код 200), плюс общий Duration Assertion (5 сек макс). В конце — три листенера: View Results Tree (для отладки, рекомендую отключить при реальной нагрузке), Summary Report и Aggregate Report.
+
+Важный момент: JSONPath $.jobs[0].url в шаге 5 — это предположение по структуре ответа, точную схему JSON я не выгружал (не хотел делать лишние запросы без необходимости). Если хотите, могу отдельно снять точную структуру ответа /api/jobs и поправить extractor под реальные поля.
+
+
+
+
