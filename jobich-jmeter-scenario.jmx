@@ -2,7 +2,7 @@
 <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Jobich.ch - New User Job Search Scenario">
-      <stringProp name="TestPlan.comments">Generated from real network traffic captured on jobich.ch (homepage -&gt; &quot;Search jobs&quot; -&gt; keyword search -&gt; location filter -&gt; job detail -&gt; similar jobs). Verified step-by-step in browser on 2026-07-15. Upload CV and the &quot;Set preferences&quot; wizard were intentionally NOT exercised: CV requires a real file, and the wizard&apos;s &quot;Show jobs&quot; step (/api/jobs?action=preview) dead-ends on an email-gated teaser page (only 5 of N jobs shown, rest require email subscription) - not reachable anonymously past that point.</stringProp>
+      <stringProp name="TestPlan.comments">Homepage -&gt; &quot;Search jobs&quot; -&gt; keyword search -&gt; location filter -&gt; job detail -&gt; similar jobs).  Upload CV and the &quot;Set preferences&quot; wizard were intentionally NOT exercised: CV requires a real file, and the wizard&apos;s &quot;Show jobs&quot; step (/api/jobs?action=preview) dead-ends on an email-gated teaser page (only 5 of N jobs shown, rest require email subscription).</stringProp>
       <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments">
